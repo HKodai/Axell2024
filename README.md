@@ -1,8 +1,8 @@
 # 概要
-Axell AI Contest 2024(https://signate.jp/competitions/1374)の3位解法。このコンペは4倍超解像モデルの精度(PSNRで評価)を競うものだったが、推論時間の制限(Tesla T4で1枚あたり0.035sec以内)があり、モデルの高速化も重要だった。
+Axell AI Contest 2024(https://signate.jp/competitions/1374 )の3位解法。このコンペは4倍超解像モデルの精度(PSNRで評価)を競うものだったが、推論時間の制限(Tesla T4で1枚あたり0.035sec以内)があり、モデルの高速化も重要だった。
 
 # モデル
-EDSR(https://arxiv.org/abs/1707.02921)をベースとするCNNを使用した。EDSRはSRResNetを改造したモデルであり、次のような特長がある。
+EDSR(https://arxiv.org/abs/1707.02921 )をベースとするCNNを使用した。EDSRはSRResNetを改造したモデルであり、次のような特長がある。
 1. 残差ブロックを利用するのでネットワークを深くできる。
 2. アップサンプリングを最後に行うので計算量が少ない。
 3. SRResNetからbatch normalization層を削除し、超解像タスクに最適化している。
