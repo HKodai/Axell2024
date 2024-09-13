@@ -1,8 +1,21 @@
 # 概要
 Axell AI Contest 2024(https://signate.jp/competitions/1374 )の3位解法。このコンペは4倍超解像モデルの精度(PSNRで評価)を競うものだったが、推論時間の制限(Tesla T4で1枚あたり0.035sec以内)があり、モデルの高速化も重要だった。
-|![low](./dataset/validation/0.25x/2.png "低解像画像")|![bicubic](./bicubic.png "Bicubic補間")|![edsr](./output/2.png "実装したモデル")|![original](./dataset/validation/original/2.png "元画像")|
-|:---:|:---:|:---:|:---:|
-|低解像画像|Bicubic補間(PSNR: 28.34 dB)|実装したモデル(PSNR: 31.47 dB)|元画像|
+<table>
+  <tr>
+    <td style="text-align:center;"><img src="./dataset/validation/0.25x/2.png" alt="低解像画像" width="72"/></td>
+    <td style="text-align:center;"><img src="./bicubic.png" alt="Bicubic補間" width="288"/></td>
+    <td style="text-align:center;"><img src="./output/2.png" alt="実装したモデル" width="288"/></td>
+    <td style="text-align:center;"><img src="./dataset/validation/original/2.png" alt="元画像" width="288"/></td>
+  </tr>
+  <tr>
+    <td style="text-align:center;">低解像画像</td>
+    <td style="text-align:center;">Bicubic補間(PSNR: 28.34 dB)</td>
+    <td style="text-align:center;">実装したモデル(PSNR: 31.47 dB)</td>
+    <td style="text-align:center;">元画像</td>
+  </tr>
+</table>
+
+
 
 
 # モデル
