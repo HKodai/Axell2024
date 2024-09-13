@@ -1,5 +1,9 @@
 # 概要
 Axell AI Contest 2024(https://signate.jp/competitions/1374 )の3位解法。このコンペは4倍超解像モデルの精度(PSNRで評価)を競うものだったが、推論時間の制限(Tesla T4で1枚あたり0.035sec以内)があり、モデルの高速化も重要だった。
+|![low](./dataset/validation/0.25x/2.png "低解像画像")|![bicubic](./bicubic.png "Bicubic補間")|![edsr](./output/2.png "実装したモデル")|![original](./dataset/validation/original/2.png "元画像")|
+|:---:|:---:|:---:|:---:|
+|低解像画像|Bicubic補間(PSNR: 28.34 dB)|実装したモデル(PSNR: 31.47 dB)|元画像|
+
 
 # モデル
 EDSR(https://arxiv.org/abs/1707.02921 )をベースとするCNNを使用した。EDSRはSRResNetを改造したモデルであり、次のような特長がある。
@@ -23,4 +27,31 @@ EDSR(https://arxiv.org/abs/1707.02921 )をベースとするCNNを使用した�
 1. モデルを半精度化する。
 2. 入力の(バッチサイズ, チャンネル数)を(3, 1)ではなく(1, 3)とする。
 
-学習方法などの詳細は後日追記予定
+# ディレクトリ構造
+    .
+    ├── dataset/
+    │   ├── train/          <- 訓練データ
+    │   └── validation/
+    │       ├── 0.25x/      <- 検証データ(低解像度)
+    │       └── original/   <- 検証データ(高解像度)
+    ├── lib/
+    │   ├── dataprocess.py  <- データセットの定義
+    │   └── util.py         <- PSNRの計算とEarly Stopping
+    ├── submit/
+    │   └── model.onnx      <- 学習済みモデル
+    ├── FP16converter.py    <- FP32からFP16への変換
+    ├── model.py            <- モデルの定義と学習
+    ├── README.md           <- このファイル
+    └── validate.py         <- 学習済みモデルの検証
+訓練データと検証データには配布された画像を使用したが公開はできないので、訓練データは削除し、検証データはSet5に差し替えた。
+
+# モデルの作成方法
+## 1. model.pyを実行する
+### データセットの定義
+訓練データを512px四方に切り出したものを正解画像とし、正解画像を1/4に縮小したものを入力画像とする。データ拡張として、画像の上下左右反転をランダムに行う。1エポックは8500枚とする。
+### 学習
+validationのlossが10エポックの間最小値を更新しなくなるまで学習する。学習済みのモデルはsubmit/に保存される。
+## 2. FP16converter.pyを実行する
+submit/model.onnxをFP16化し、モデルの最初に入力をFP32からFP16にキャストするノードを追加する。
+## 3. validate.pyを実行する
+dataset/validation/の画像で検証を行い、PSNR値を表示する。モデルが出力した画像はoutput/に保存される。
